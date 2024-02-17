@@ -106,7 +106,7 @@ app.post('/login', (req, res) => {
 });
 
 app.get('/', (req,res) => {
-  res.send(req.session);
+  res.redirect('/home');
 })
 
 app.get('/profile', (req, res) => {
