@@ -13,6 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
 </head>
 <style>
+    .zoomed-in {
+    zoom: 150%;
+    }
     .anta-regular {
     font-family: "Anta", sans-serif;
     font-weight: 400;
@@ -204,7 +207,7 @@
         margin-top: 10px;
     }
 </style>
-<body>
+<body class="zoomed-in">
     <form>
         <h1>Create Test</h1>
         <button id="format-test-btn" onclick="saveAndFormatTest(); return false;">Export</button> <!-- Moved here -->
