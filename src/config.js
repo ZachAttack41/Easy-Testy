@@ -57,11 +57,14 @@ const TestSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  questions:
-  {
+  questions: {
     type: [QuestionSchema],
     required: true,
   },
+  createdBy: {
+    type: String,
+    required: true,
+  }
 });
 
 const SchoolCodeSchema = new mongoose.Schema({

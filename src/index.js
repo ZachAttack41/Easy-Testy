@@ -128,7 +128,11 @@ app.get('/logout', (req, res) => {
 
 app.get('/dashboard', async (req, res) => {
   try {
-    const tests = await TestModel.find();
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+
+    const tests = await TestModel.find({ createdBy: req.session.user.username });
     res.render('dashboard', { tests: tests, username: req.session.user.username });
   } catch (error) {
     console.error('Error retrieving tests:', error);
@@ -139,8 +143,9 @@ app.get('/dashboard', async (req, res) => {
 app.post('/save_test', async (req, res) => {
   try {
     const { testName, questions } = req.body;
+    const createdBy = req.session.user.username; // Get the username of the logged-in user
 
-    let existingTest = await TestModel.findOne({ testName });
+    let existingTest = await TestModel.findOne({ testName, createdBy });
 
     if (existingTest) {
       existingTest.questions = questions;
@@ -150,6 +155,7 @@ app.post('/save_test', async (req, res) => {
       const newTest = new TestModel({
         testName: testName,
         questions: questions,
+        createdBy: createdBy // Save the username of the creator
       });
       await newTest.save();
       res.status(200).json({ testId: newTest._id });
@@ -232,8 +238,9 @@ app.get('/formatted_test/:testid', async (req, res) => {
 app.post('/save_and_format_test', async (req, res) => {
   try {
     const { testName, questions } = req.body;
+    const createdBy = req.session.user.username; // Get the username of the logged-in user
 
-    let existingTest = await TestModel.findOne({ testName });
+    let existingTest = await TestModel.findOne({ testName, createdBy });
 
     if (existingTest) {
       existingTest.questions = questions;
@@ -243,6 +250,7 @@ app.post('/save_and_format_test', async (req, res) => {
       const newTest = new TestModel({
         testName: testName,
         questions: questions,
+        createdBy: createdBy
       });
       await newTest.save();
       res.status(200).json({ testId: newTest._id });
