@@ -110,7 +110,7 @@ app.get('/dashboard', async (req, res) => {
 app.post('/save_test', async (req, res) => {
   try {
     const { testName, questions } = req.body;
-    const createdBy = req.session.user.username; // Get the username of the logged-in user
+    const createdBy = req.session.user.username;
 
     let existingTest = await TestModel.findOne({ testName, createdBy });
 
@@ -122,7 +122,7 @@ app.post('/save_test', async (req, res) => {
       const newTest = new TestModel({
         testName: testName,
         questions: questions,
-        createdBy: createdBy // Save the username of the creator
+        createdBy: createdBy
       });
       await newTest.save();
       res.status(200).json({ testId: newTest._id });
@@ -131,36 +131,6 @@ app.post('/save_test', async (req, res) => {
     console.error('Error saving test:', error);
     res.status(500).send('Internal Server Error: ' + error.message);
   }
-});
-
-const puppeteer = require('puppeteer');
-
-app.post('/generate_test_pdf', async (req, res) => {
-    try {
-        const updatedTestContent = req.body.updatedTestContent;
-
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-
-        await page.setContent(updatedTestContent);
-
-        const pdfBuffer = await page.pdf({ format: 'A4' });
-
-        await browser.close();
-
-        const pdfPath = path.join(__dirname, 'public', 'test_paper.pdf');
-        fs.writeFileSync(pdfPath, pdfBuffer);
-
-        res.writeHead(200, {
-            'Content-Type': 'application/pdf',
-            'Content-Disposition': 'attachment; filename=test_paper.pdf',
-            'Content-Length': pdfBuffer.length,
-        });
-        res.end(pdfBuffer);
-    } catch (error) {
-        console.error('Error generating PDF:', error);
-        res.status(500).send('Internal Server Error');
-    }
 });
 
 app.listen(port, () => {
