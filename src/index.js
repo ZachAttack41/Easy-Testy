@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const crypto = require('crypto');
 const fs = require('fs');
-const { LoginModel, TestModel, SchoolCodeModel } = require('./config');
+const { LoginModel, TestModel, SchoolCodeModel, StudentLoginModel } = require('./config');
 
 const app = express();
 const port = 3000;
@@ -55,6 +55,30 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+app.post('/studentsignup', async (req, res) => {
+  try {
+    const schoolCode = req.body.schoolCode;
+    const username = req.body.username;
+    const password = req.body.password;
+
+    if (schoolCode === 'LYBK' || 'Admin' || 'TEST') {
+      const existingUser = await StudentLoginModel.findOne({ name: username });
+      if (!existingUser) {
+        const newUser = new StudentLoginModel({ name: username, password: hash(password) });
+        await newUser.save();
+        res.status(200).redirect('/studentlogin');
+      } else {
+        res.status(400).send('User already exists');
+      }
+    } else {
+      res.status(400).send('Invalid school code');
+    }
+  } catch (error) {
+    console.error('Error during signup:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 app.post('/login', (req, res) => {
   LoginModel.findOne({ name: req.body.username }).exec().then((s) => {
@@ -63,6 +87,22 @@ app.post('/login', (req, res) => {
         username: req.body.username,
       };
       res.redirect('/dashboard');
+    } else {
+      res.status(500).send('Invalid username or password');
+    }
+  }).catch((error) => {
+    console.error('Error during login:', error);
+    res.status(500).send('Internal Server Error');
+  });
+});
+
+app.post('/studentlogin', (req, res) => {
+  StudentLoginModel.findOne({ name: req.body.username }).exec().then((s) => {
+    if (s != null && hash(req.body.password) == s.password) {
+      req.session.user = {
+        username: req.body.username,
+      };
+      res.redirect('/studentdashboard');
     } else {
       res.status(500).send('Invalid username or password');
     }

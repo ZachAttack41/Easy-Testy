@@ -26,6 +26,18 @@ const LoginSchema = new mongoose.Schema({
   },
 });
 
+const StudentLoginSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+});
+
 const LoginModel = mongoose.model('Login', LoginSchema);
 
 const collection = mongoose.model('users', LoginSchema);
@@ -77,11 +89,14 @@ const SchoolCodeSchema = new mongoose.Schema({
 
 const SchoolCodeModel = mongoose.model('SchoolCode', SchoolCodeSchema);
 
+const StudentLoginModel = mongoose.model('StudentLogin', StudentLoginSchema);
+
 const TestModel = connectTests.model('Test', TestSchema);
 
 module.exports = {
   LoginModel,
   collection,
   TestModel,
-  SchoolCodeModel
+  SchoolCodeModel,
+  StudentLoginModel
 };
