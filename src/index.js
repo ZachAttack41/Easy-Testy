@@ -4,43 +4,10 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const crypto = require('crypto');
 const fs = require('fs');
-//const { Configuration, OpenAIAPI } = require("openai");
 const { LoginModel, TestModel, SchoolCodeModel } = require('./config');
-
-//const config = require('./src/.config');
 
 const app = express();
 const port = 3000;
-
-//const openaiConfig = new Configuration({
-//  apiKey: config.openai.apiKey,
-//});
-//const openai = new OpenAIAPI(openaiConfig);
-
-//app.post("/reword_questions", async (req, res) => {
- // try {
-  //  const { questions } = req.body;
-
-  //  const rewordedQuestions = [];
-
-  //  for (const question of questions) {
-  //    const response = await openai.createCompletion({
-  //      engine: "text-davinci-003",
-  //      prompt: `Please reword the following question:\n\n${question}`,
-  //    });
-
-   //   const rewordedQuestion = response.choices[0].text.trim();
-
-   //   rewordedQuestions.push(rewordedQuestion);
-   // }
-
-   // res.json({ rewordedQuestions });
-//  } catch (error) {
-//    console.error('Error rewording questions:', error);
-//    res.status(500).json({ error: 'Internal Server Error' });
-//  }
-// });
-
 
 app.use(session({
   secret: '2866bb50-045f-4f10-a813-165d8844b024',
