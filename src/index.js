@@ -147,6 +147,13 @@ app.get('/dashboard', async (req, res) => {
   }
 });
 
+app.get('/studentdashboard', async (req, res) => {
+    if (!req.session.user) {
+      return res.redirect('/studentlogin');
+    }
+    res.render('studentdashboard', { username: req.session.user.username });
+});
+
 app.post('/save_test', async (req, res) => {
   try {
     const { testName, questions } = req.body;
