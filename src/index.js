@@ -37,7 +37,7 @@ app.post('/signup', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    if (schoolCode === 'LYBK') {
+    if (schoolCode === 'LYBK' || 'Admin' || 'TEST') {
       const existingUser = await LoginModel.findOne({ name: username });
       if (!existingUser) {
         const newUser = new LoginModel({ name: username, password: hash(password) });
