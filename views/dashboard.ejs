@@ -85,6 +85,22 @@ a:hover {
     background-color: #45a049;
 }
 
+.classes a {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #ff0000;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.classes a:hover {
+    background-color: #9d0e0e;
+}
+
 a {
     display: inline-block;
     margin-top: 20px;
@@ -132,7 +148,7 @@ a:hover {
         <% for (let i = 0; i < tests.length; i++) { %>
             <a href="/view_test/<%= tests[i]._id %>">
                 <div>
-                    <h2><%= tests[i].testName %></h2>
+                    <h3><%= tests[i].testName %></h2>
                     <h3><%= tests[i].questions.length %> Questions</h3>
                 </div>
             </a>
@@ -144,6 +160,9 @@ a:hover {
         <a href="/logout">Logout</a>
         <div class="create-test">
             
+        </div>
+        <div class="classes">
+            <a href="/classes">Classes</a>
         </div>
     </section>
 </body>

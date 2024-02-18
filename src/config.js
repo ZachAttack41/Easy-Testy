@@ -87,6 +87,37 @@ const SchoolCodeSchema = new mongoose.Schema({
   },
 });
 
+const classSchema = new mongoose.Schema({
+  className: {
+    type: String,
+    required: true
+  },
+  createdBy: {
+    type: String,
+    required: true
+  },
+  subject: {
+    type: String,
+    required: true
+  },
+  grade: {
+    type: String,
+    required: true
+  },
+  period: {
+    type: Number,
+    required: true
+  },
+  classCode: {
+    type: String,
+    required: true,
+    unique: true
+  }
+});
+
+
+const ClassModel = mongoose.model('Class', classSchema);
+
 const SchoolCodeModel = mongoose.model('SchoolCode', SchoolCodeSchema);
 
 const StudentLoginModel = mongoose.model('StudentLogin', StudentLoginSchema);
@@ -98,5 +129,6 @@ module.exports = {
   collection,
   TestModel,
   SchoolCodeModel,
-  StudentLoginModel
+  StudentLoginModel,
+  ClassModel
 };

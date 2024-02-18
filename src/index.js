@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const crypto = require('crypto');
 const fs = require('fs');
-const { LoginModel, TestModel, SchoolCodeModel, StudentLoginModel } = require('./config');
+const { LoginModel, TestModel, SchoolCodeModel, StudentLoginModel, ClassModel } = require('./config');
 
 const app = express();
 const port = 3000;
@@ -151,8 +151,91 @@ app.get('/studentdashboard', async (req, res) => {
     if (!req.session.user) {
       return res.redirect('/studentlogin');
     }
-    res.render('studentdashboard', { username: req.session.user.username });
+    const classes = await ClassModel.find({ createdBy: req.session.user.username });
+    res.render('studentdashboard', { classes: classes, username: req.session.user.username });
 });
+
+async function isValidClassCodeFunction(classCode) {
+  const existingClass = await ClassModel.findOne({ className: classCode });
+  
+  if (existingClass) {
+      return true;
+  } else {
+      return false;
+  }
+}
+
+app.post('/joinclass', async (req, res) => {
+  try {
+      const classCode = req.body.classCode;
+
+      const isValidClassCode = await isValidClassCodeFunction(classCode);
+
+      console.log('Class code:', classCode);
+      console.log('Is valid:', isValidClassCode);
+
+      if (isValidClassCode) {
+          const user = req.session.user;
+          await ClassModel.create({ className: classCode, createdBy: user.username });
+
+          return res.redirect('/studentdashboard');
+      } else {
+          return res.render('joinclass.ejs', { error: 'Invalid class code' });
+      }
+  } catch (error) {
+      console.error('Error joining class:', error);
+      return res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/createnewclass', (req, res) => {
+  res.render('createnewclass', { error: null });
+});
+
+
+app.post('/createclass', async (req, res) => {
+  try {
+    const { className, subject, grade, period, classCode } = req.body;
+    const createdBy = req.session.user.username;
+
+    let existingClass = await ClassModel.findOne({ className, createdBy });
+
+    if (existingClass) {
+      existingClass.subject = subject;
+      existingClass.grade = grade;
+      existingClass.period = period;
+      existingClass.classCode = classCode;
+      await existingClass.save();
+    } else {
+      const newClass = new ClassModel({
+        className: className,
+        subject: subject,
+        grade: grade,
+        period: period,
+        classCode: classCode,
+        createdBy: createdBy
+      });
+      await newClass.save();
+    }
+
+    res.redirect('/classes');
+  } catch (error) {
+    console.error('Error saving class:', error);
+    res.status(500).send('Internal Server Error: ' + error.message);
+  }
+});
+
+app.get('/classes', async (req, res) => {
+  try {
+    const classes = await ClassModel.find({ createdBy: req.session.user.username });
+    res.render('classes', { classes });
+  } catch (error) {
+    console.error('Error fetching classes:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 
 app.post('/save_test', async (req, res) => {
   try {

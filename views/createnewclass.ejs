@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Class - EasyTest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
+</head>
+<style>
+    .anta-regular {
+        font-family: "Anta", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    body {
+        font-family: "Anta", sans-serif;
+        background-color: #f4f7fc;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        margin: auto;
+        padding: 20px;
+        max-width: 600px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #3498db;
+    }
+
+    form {
+        margin-top: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-size: 18px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+        width: 100%;
+        padding: 12px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    button {
+        background-color: #3498db;
+        color: #fff;
+        cursor: pointer;
+        font-size: 18px;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        width: 100%;
+    }
+
+    button:hover {
+        background-color: #217dbb;
+    }
+
+    .error-message {
+        color: red;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <h1>Create New Class</h1>
+        <form action="/createclass" method="post">
+            <div class="form-group">
+                <label for="subject">Subject:</label>
+                <select id="subject" name="subject">
+                    <% const subjects = {
+                        "English": ["Literature", "Creative Writing", "Poetry", "Journalism"],
+                        "Math": ["Calculus", "Algebra", "Geometry", "Statistics"],
+                        "Science": ["Biology", "Chemistry", "Physics", "Astronomy"],
+                        "History": ["Ancient History", "European History", "American History", "World History"],
+                        "Geography": ["Physical Geography", "Human Geography", "Geopolitics", "Cartography"],
+                        "Physical Education (P.E)": ["Athletics", "Gymnastics", "Swimming", "Team Sports"],
+                        "Art": ["Drawing", "Painting", "Sculpture", "Photography"],
+                        "Music": ["Instrumental Music", "Vocal Music", "Music Theory", "Music Composition"],
+                        "Drama": ["Theatre Acting", "Theatre Production", "Stagecraft", "Playwriting"],
+                        "Computer Science": ["Programming", "Database Management", "Web Development", "Network Security"],
+                        "Information Technology (IT)": ["Hardware", "Software", "Networks", "Cybersecurity"],
+                        "Social Studies": ["Economics", "Political Science", "Sociology", "Anthropology"],
+                        "Economics": ["Microeconomics", "Macroeconomics", "International Economics", "Development Economics"],
+                        "Political Science": ["Comparative Politics", "Political Theory", "International Relations", "Public Administration"],
+                        "Psychology": ["Cognitive Psychology", "Developmental Psychology", "Social Psychology", "Clinical Psychology"],
+                        "Sociology": ["Cultural Sociology", "Social Stratification", "Urban Sociology", "Sociological Theory"],
+                        "Anthropology": ["Cultural Anthropology", "Biological Anthropology", "Archaeology", "Linguistic Anthropology"],
+                        "Philosophy": ["Ethics", "Metaphysics", "Epistemology", "Logic"],
+                        "Religion": ["Christianity", "Islam", "Judaism", "Buddhism"],
+                        "Foreign Languages": ["Spanish", "French", "German", "Chinese"],
+                        "Literature": ["American Literature", "British Literature", "World Literature", "Comparative Literature"],
+                        "Creative Writing": ["Fiction Writing", "Poetry Writing", "Screenwriting", "Creative Nonfiction Writing"],
+                        "Poetry": ["Modern Poetry", "Romantic Poetry", "Classic Poetry", "Contemporary Poetry"],
+                        "Journalism": ["Print Journalism", "Broadcast Journalism", "Digital Journalism", "Investigative Journalism"],
+                        "Business Studies": ["Management", "Marketing", "Finance", "Entrepreneurship"],
+                        "Accounting": ["Financial Accounting", "Managerial Accounting", "Auditing", "Tax Accounting"],
+                        "Finance": ["Corporate Finance", "Investments", "Financial Markets", "Financial Modeling"],
+                        "Marketing": ["Digital Marketing", "Social Media Marketing", "Content Marketing", "Brand Management"],
+                        "Management": ["Human Resource Management", "Strategic Management", "Operations Management", "Project Management"],
+                        "Entrepreneurship": ["Startup Management", "Innovation Management", "Venture Capital", "Business Planning"],
+                        "Law": ["Criminal Law", "Civil Law", "Constitutional Law", "International Law"],
+                        "Civics": ["Citizenship Education", "Government", "Political Participation", "Civil Rights"],
+                        "Environmental Science": ["Ecology", "Climate Science", "Environmental Policy", "Conservation Biology"],
+                        "Health Education": ["Health Promotion", "Disease Prevention", "Nutrition", "Sex Education"],
+                        "Nutrition": ["Dietetics", "Nutritional Biochemistry", "Community Nutrition", "Sports Nutrition"],
+                        "Home Economics": ["Cooking", "Sewing", "Financial Management", "Child Development"],
+                        "Family Studies": ["Marriage and Family Therapy", "Family Counseling", "Parenting", "Family Dynamics"],
+                        "Engineering": ["Mechanical Engineering", "Electrical Engineering", "Civil Engineering", "Computer Engineering"],
+                        "Architecture": ["Architectural Design", "Architectural Theory", "Urban Planning", "Sustainable Architecture"],
+                        "Design and Technology": ["Product Design", "Industrial Design", "User Experience Design", "Graphic Design"],
+                        "Graphic Design": ["Typography", "Brand Identity Design", "Publication Design", "Package Design"],
+                        "Industrial Arts": ["Metalworking", "Woodworking", "Ceramics", "Glassblowing"],
+                        "Agricultural Science": ["Crop Science", "Animal Science", "Agricultural Economics", "Agricultural Engineering"],
+                        "Forestry": ["Forest Management", "Forest Ecology", "Wildlife Management", "Forest Conservation"],
+                        "Marine Science": ["Marine Biology", "Oceanography", "Marine Geology", "Marine Conservation"],
+                        "Astronomy": ["Astrophysics", "Planetary Science", "Cosmology", "Observational Astronomy"],
+                        "Geology": ["Mineralogy", "Petrology", "Structural Geology", "Sedimentology"]
+                    }; %>
+                    <% Object.entries(subjects).forEach(([subject, branches]) => { %>
+                        <optgroup label="<%= subject %>">
+                            <% branches.forEach(branch => { %>
+                                <option value="<%= branch %>"><%= branch %></option>
+                            <% }); %>
+                        </optgroup>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="name">Class Name:</label>
+                <input type="text" id="name" name="className" placeholder="Enter class name" required>
+            </div>
+            <div class="form-group">
+                <label for="grade">Grade:</label>
+                <input type="number" id="grade" name="grade" placeholder="Enter grade">
+            </div>
+            <div class="form-group">
+                <label for="period">Period:</label>
+                <input type="number" id="period" name="period" placeholder="Enter period">
+            </div>
+            <div class="form-group">
+                <label for="classCode">Class Code:</label>
+                <input type="text" id="classCode" name="classCode" placeholder="Enter class code" required>
+            </div>
+            <button type="submit">Create Class</button>
+        </form>
+        <% if (error) { %>
+            <p class="error-message"><%= error %></p>
+        <% } %>
+    </div>
+</body>
+
+</html>

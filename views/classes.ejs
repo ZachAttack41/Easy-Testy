@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Classes - EasyTest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Anta", sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #3498db;
+            padding: 20px;
+            color: #fff;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        section {
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #3498db;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            font-size: 1.2em;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .create-class-btn {
+            margin-top: 20px;
+        }
+
+        .create-class-btn a {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #4caf50;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .create-class-btn a:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            display: inline-block;
+            padding: 15px 20px;
+            font-size: 1.2em;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #ff0000;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Manage Classes</h1>
+    </header>
+
+    <section>
+        <h2>Your Classes:</h2>
+        <div class="class-list">
+            <% for (let i = 0; i < classes.length; i++) { %>
+                <a href="/view_class/<%= classes[i]._id %>">
+                    <div class="class-item">
+                        <h3><%= classes[i].className %></h3>
+                        <p>Subject: <%= classes[i].subject %></p>
+                        <p>Grade: <%= classes[i].grade %></p>
+                        <p>Period: <%= classes[i].period %></p>
+                    </div>
+                </a>
+            <% } %>
+        </div>
+        <div class="create-class-btn">
+            <a href="/createnewclass">Create New Class</a>
+        </div>
+
+        <a href="/dashboard">Back to Dashboard</a>
+    </section>
+</body>
+
+</html>
