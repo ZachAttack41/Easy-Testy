@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Exam - EasyTest</title>
+    <link rel="stylesheet" href="/public/assign_exam.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
+</head>
+<style>
+    .anta-regular {
+        font-family: "Anta", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    body {
+        font-family: "Anta", sans-serif;
+        background-color: #122028;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: #0a1116;
+        padding: 20px;
+        color: #fff;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    section {
+            margin: 25px auto;
+            padding: 25px;
+            background-color: #0a1116;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            width: 80%;
+            max-width: 800px;
+            border-radius: 25px;
+            position: relative;
+            text-align: center;
+        }
+
+    h2 {
+        color: #ffffff;
+        font-size: 1.5em;
+        margin-right: 17px;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        font-size: 1.5em;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    a {
+        color: #ffffff;
+        text-decoration: none;
+        margin-right: 20px;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .create-test {
+        margin-top: 20px;
+    }
+
+    p {
+        color: #ffffff;
+    }
+
+
+
+    .create-test a {
+        display: inline-block;
+        padding: 15px 30px;
+        font-size: 1.2em;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        background-color: #084321;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        margin-right: 10px; /* Added margin-right */
+    }
+
+    .create-test a:hover {
+        background-color: #063118;
+    }
+
+    .classes a {
+        display: inline-block;
+        padding: 15px 30px;
+        font-size: 1.2em;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        background-color: #122028;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        margin-right: 10px; /* Added margin-right */
+    }
+
+    .classes a:hover {
+        background-color: #0e1a20;
+    }
+
+    .logout-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 15px 30px;
+        font-size: 1.2em;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        background-color: #db3434;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .logout-btn:hover {
+        background-color: #b70000;
+    }
+
+    a {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 15px 30px;
+        font-size: 1.2em;
+        text-align: center;
+        text-decoration: none;
+        color: #ffffff;
+        background-color: #080683;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    a:hover {
+        background-color: #05045d;
+    }
+    
+    @media (max-width: 768px) {
+        section {
+            margin: 10px;
+            padding: 15px;
+            font-size: 1.5em;
+        }
+
+        .create-test a,
+        .classes a,
+        .logout-btn {
+            font-size: 1em;
+            padding: 10px 20px;
+        }
+    }
+
+    h3 {
+        color: #ffffff;
+    }
+
+</style>
+
+<body>
+    <header>
+        <h1><%= classData.className %> - Period <%= classData.period %></h1>
+    </header>
+
+    <section>
+        <h2>Assign Exam:</h2>
+        <% for (let i = 0; i < tests.length; i++) { %>
+            <a href="/examdetails/<%= tests[i]._id %>/<%= classData._id %>" style="text-decoration: none; color: #000;">
+                <div>
+                <h3><%= tests[i].testName %></h3>
+                    <p><%= tests[i].questions.length %> Questions</p>
+            </div>
+        </a>
+        <% } %>
+        <div class="create-test">
+            <a href="/views/createatest.ejs">Create New Test</a>
+            <a href="/classes">Classes</a>
+        </div>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </section>
+</body>
+
+</html>

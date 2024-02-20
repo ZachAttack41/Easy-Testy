@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Class - EasyTest</title>
+    <link rel="stylesheet" href="/public/view_class.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #122028;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0a1116;
+            padding: 20px;
+            color: #fff;
+            text-align: center;
+            font-size: 32px;
+        }
+
+        section {
+            margin: 25px auto;
+            padding: 25px;
+            background-color: #0a1116;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            width: 80%;
+            max-width: 800px;
+            border-radius: 25px;
+            position: relative;
+        }
+
+        .class-info {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .class-info p {
+            width: 100%;
+            margin-bottom: 8px;
+            font-size: 20px;
+            color: #fff;
+        }
+
+        h2 {
+            color: #ffffff;
+            font-size: 24px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-btn, .add-assignment-btn, .assign-exam-btn, .delete-btn, .manage-students-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #080683;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            text-decoration: none;
+        }
+
+        .back-btn:hover, .add-assignment-btn:hover, .assign-exam-btn:hover, .delete-btn:hover, .manage-students-btn:hover {
+            background-color: #06045c;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+        }
+
+        .action-buttons a {
+            display: block;
+            margin-bottom: 10px; /* Add space between buttons */
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none; /* Remove default link underline */
+            color: #fff;
+            text-align: center;
+        }
+
+        .assign-exam-btn {
+            background-color: #084321; /* Green color */
+        }
+
+        .assign-exam-btn:hover {
+            background-color: #063118; /* Darker green color on hover */
+        }
+
+        .add-assignment-btn {
+            background-color: #084321; /* Green color */
+        }
+
+        .add-assignment-btn:hover {
+            background-color: #063118; /* Darker green color on hover */
+        }
+
+        .delete-btn {
+            background-color: #e74c3c; /* Red color */
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b; /* Darker red color on hover */
+        }
+
+        .manage-students-btn {
+            background-color: #080683; /* Blue color */
+        }
+
+        .manage-students-btn:hover {
+            background-color: #060563; /* Darker blue color on hover */
+        }
+
+        .current-assignments, .assigned-exams {
+            margin-top: 30px;
+        }
+
+        .current-assignments h2, .assigned-exams h2 {
+            margin-bottom: 15px;
+        }
+
+        .assigned-exam-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #080683;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .assigned-exam-btn:hover {
+            background-color: #060563;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1><%= classData.className %> - Period <%= classData.period %></h1>
+    </header>
+    <section>
+        <div class="class-info">
+            <h2>Class Information</h2>
+            <p><strong>Subject:</strong> <span style="color: white;"><%= classData.subject %></span></p>
+            <p><strong>Grade:</strong> <span style="color: white;"><%= classData.grade %></span></p>
+            <p><strong>Class Code:</strong> <span style="color: white;"><%= classData.classCode %></span></p>
+            <div class="buttons">
+                <button type="button" class="manage-students-btn">Manage Students</button>
+            </div>
+        </div>        
+        </div>
+        <div class="buttons">
+            <a href="/classes" class="back-btn">Back to Classes</a>
+            <button type="button" class="delete-btn" onclick="confirmDelete()">Delete Class</button>
+        </div>
+    </section>
+    <section class="current-assignments">
+        <h2>Current Assignments</h2>
+        <div class="buttons">
+            <a href="/addassignment" class="add-assignment-btn">Add Assignment</a>
+        </div>
+    </section>
+    <section class="assigned-exams">
+        <h2>Assigned Exams</h2>
+        <% if (assignedExams.length > 0) { %>
+            <ul>
+                <% assignedExams.forEach(examAssignment => { %>
+                    <li><a href="/viewtestresults/<%= examAssignment.examId %>" class="assigned-exam-btn"><%= examAssignment.examName %></a></li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No exams assigned.</p>
+        <% } %>
+        <div class="buttons">
+            <a href="/assignexam/<%= classData._id %>" class="assign-exam-btn">Assign Exam</a>
+        </div>
+    </section>                    
+    <script>
+        function confirmDelete() {
+            if (confirm("Are you sure you want to delete the class? This action cannot be undone.")) {
+                document.getElementById("deleteForm").submit();
+            }
+        }
+    </script>
+</body>
+</html>

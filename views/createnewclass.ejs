@@ -18,7 +18,7 @@
 
     body {
         font-family: "Anta", sans-serif;
-        background-color: #f4f7fc;
+        background-color: #0a1116;
         margin: 0;
         padding: 0;
     }
@@ -27,18 +27,26 @@
         margin: auto;
         padding: 20px;
         max-width: 600px;
-        background-color: #fff;
+        background-color: #0a1116;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
         text-align: center;
-        color: #3498db;
+        color: #ffffff;
     }
 
     form {
-        margin-top: 20px;
-    }
+            margin: 25px auto;
+            padding: 25px;
+            background-color: #0a1116;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            width: 80%;
+            max-width: 800px;
+            border-radius: 25px;
+            position: relative;
+            text-align: center;
+        }
 
     .form-group {
         margin-bottom: 20px;
@@ -47,7 +55,7 @@
     label {
         display: block;
         margin-bottom: 8px;
-        color: #333;
+        color: #ffffff;
         font-size: 18px;
     }
 
@@ -62,7 +70,7 @@
     }
 
     button {
-        background-color: #3498db;
+        background-color: #084321;
         color: #fff;
         cursor: pointer;
         font-size: 18px;
@@ -73,7 +81,7 @@
     }
 
     button:hover {
-        background-color: #217dbb;
+        background-color: #063319;
     }
 
     .error-message {
@@ -81,8 +89,24 @@
         margin-top: 10px;
         font-size: 16px;
     }
-</style>
 
+    .cancel-btn {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        background-color: #e74c3c;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-size: 18px;
+        margin-top: 10px;
+        transition: background-color 0.3s;
+    }
+
+    .cancel-btn:hover {
+        background-color: #c0392b;
+    }
+</style>
 <body>
     <div class="container">
         <h1>Create New Class</h1>
@@ -165,11 +189,11 @@
                 <input type="text" id="classCode" name="classCode" placeholder="Enter class code" required>
             </div>
             <button type="submit">Create Class</button>
+            <a href="/classes" class="cancel-btn">Cancel</a>
         </form>
         <% if (error) { %>
             <p class="error-message"><%= error %></p>
         <% } %>
     </div>
 </body>
-
 </html>

@@ -9,95 +9,94 @@
     <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
 </head>
 <style>
-        .anta-regular {
+    .anta-regular {
         font-family: "Anta", sans-serif;
         font-weight: 400;
         font-style: normal;
-        }
+    }
     body {
-            font-family: "Anta", sans-serif;
-            background-color: #f4f7fc;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+        font-family: "Anta", sans-serif;
+        background-color: #122028;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
 
-        .login-container {
-            text-align: center; /* Center aligning the content */
-            max-width: 400px;
-            width: 100%;
-            padding: 40px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    .login-container {
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+        padding: 40px;
+        background-color: #0e191f;
+        border-radius: 8px;
+        box-shadow: 0 0 10px #ffffff;
+    }
 
-        h2 {
-            color: #3498db;
-            font-size: 40px;
-            margin-bottom: 20px;   
-        }
+    h2 {
+        color: #ffffff;
+        font-size: 40px;
+        margin-bottom: 20px;   
+    }
 
-        form {
-            margin-top: 20px;
-        }
+    form {
+        margin-top: 20px;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 16px;
-            color: #333;
-            font-size: 18px;
-        }
+    label {
+        display: block;
+        margin-bottom: 16px;
+        color: #ffffff;
+        font-size: 18px;
+    }
 
-        input {
-            width: 100%;
-            padding: 16px;
-            margin-bottom: 24px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 18px;
-        }
+    input {
+        width: 100%;
+        padding: 16px;
+        margin-bottom: 24px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 18px;
+    }
 
-        button {
-            background-color: #3498db;
-            color: #fff;
-            cursor: pointer;
-            font-size: 20px;
-            border: none;
-            border-radius: 8px;
-            padding: 16px;
-            width: 100%;
-        }
+    button {
+        background-color: #0c151a;
+        color: #ffffff;
+        cursor: pointer;
+        font-size: 20px;
+        border: none;
+        border-radius: 8px;
+        padding: 16px;
+        width: 100%;
+    }
 
-        button:hover {
-            background-color: #217dbb;
-        }
+    button:hover {
+        background-color: #060c10;
+    }
 
-        p {
-            color: #777;
-            margin-top: 24px;
-            font-size: 18px;
-        }
+    p {
+        color: #ffffff;
+        margin-top: 24px;
+        font-size: 18px;
+    }
 
-        a {
-            color: #3498db;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 20px;
-            display: inline-block;
-            margin-top: 24px;
-        }
+    a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 20px;
+        display: inline-block;
+        margin-top: 24px;
+    }
 
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    a:hover {
+        text-decoration: underline;
+    }
 </style>
 <body>
-    <div>
+    <div class="login-container">
         <h2>Teacher Login</h2>
         <form action="/login" method="post"> 
             <div class="form-group">

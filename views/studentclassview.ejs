@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assigned Tests - EasyTest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
+    <style>
+        .anta-regular {
+            font-family: "Anta", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        body {
+            font-family: "Anta", sans-serif;
+            background-color: #122028;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0a1116;
+            padding: 20px;
+            color: #fff;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        section {
+            margin: auto;
+            padding: 25px;
+            font-family: "Anta", sans-serif;
+            background-color: #0a1116;
+            box-shadow: 0 0 10px #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            width: 75%;
+            
+        }
+
+        h2 {
+            color: #ffffff;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            font-size: 1.5em;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-right: 20px;
+            text-align: center;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #080683; /* Darker blue color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #060460; /* Even darker blue color on hover */
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #080683; /* Darker blue color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .action-btn:hover {
+            background-color: #060460; /* Even darker blue color on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1><%= classData.className %> - Period <%= classData.period %></h1>
+    </header>
+
+    <section class="assignments-container">
+        <h2>Current Assignments:</h2>
+        <!-- Assignments will be dynamically added here -->
+    </section>
+
+    <section class="assigned-exams-container">
+        <h2>Assigned Exams:</h2>
+        <!-- Assigned exams will be dynamically added here -->
+    </section>
+
+    <section>
+        <div class="buttons-container">
+            <a href="/studentdashboard" class="back-btn">Back to Dashboard</a>
+            <form action="/leaveclass" method="post">
+                <input type="hidden" name="classId" value="<%= classData._id %>">
+                <input type="hidden" name="userId" value="<%= userId %>">
+                <button type="submit" class="action-btn">Leave Class</button>
+            </form>              
+        </div>
+    </section>
+</body>
+
+</html>

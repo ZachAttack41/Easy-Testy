@@ -4,25 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup - EasyTest</title>
-    <script src="https://js.stripe.com/v3/"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
 </head>
 <style>
-        .anta-regular {
+    .anta-regular {
         font-family: "Anta", sans-serif;
         font-weight: 400;
         font-style: normal;
-        }
+    }
     body {
-    font-family: "Anta", sans-serif;
-    background-color: #f4f7fc;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+        font-family: "Anta", sans-serif;
+        background-color: #0e191f;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
     }
 
     .login-container {
@@ -30,62 +29,66 @@
         max-width: 400px;
         width: 100%;
         padding: 40px;
-        background-color: #fff;
+        background-color: #0e191f;
         border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
     }
 
     h2 {
-        color: #3498db;
-        font-size: 32px;
-        margin-bottom: 20px;
+        color: #ffffff;
+        font-size: 40px;
+        margin-bottom: 20px;   
     }
 
-    .form-group {
-        margin-bottom: 20px;
+    form {
+        margin-top: 20px;
     }
 
     label {
         display: block;
-        margin-bottom: 8px;
-        color: #333;
+        margin-bottom: 16px;
+        color: #ffffff;
         font-size: 18px;
     }
 
     input {
-        width: calc(100% - 32px);
-        padding: 12px;
+        width: 100%;
+        padding: 16px;
+        margin-bottom: 24px;
         box-sizing: border-box;
         border: 1px solid #ccc;
         border-radius: 8px;
-        font-size: 16px;
+        font-size: 18px;
+        color: #ffffff;
+        background-color: #0e191f;
     }
 
     button {
-        background-color: #3498db;
+        background-color: #122028;
         color: #fff;
         cursor: pointer;
-        font-size: 18px;
+        font-size: 20px;
         border: none;
         border-radius: 8px;
-        padding: 12px 24px;
-        width: calc(50% - 6px);
-        transition: background-color 0.3s ease;
+        padding: 16px;
+        width: 100%;
     }
 
     button:hover {
-        background-color: #217dbb;
+        background-color: #101c22;
     }
 
-    #pay-button {
-        margin-right: 6px;
+    p {
+        color: #ffffff;
+        margin-top: 24px;
+        font-size: 18px;
     }
 
     a {
-        color: #3498db;
+        color: #ffffff;
         text-decoration: none;
         font-weight: bold;
-        font-size: 22px;
+        font-size: 20px;
         display: inline-block;
         margin-top: 24px;
     }
@@ -93,7 +96,6 @@
     a:hover {
         text-decoration: underline;
     }
-
 </style>
 <body>
     <div class="login-container">
@@ -107,18 +109,10 @@
                 <label for="password">Password:</label>
                 <input type="password" name="password" placeholder="Enter password" required>
             </div>
-            <div class="form-group">
-                <label for="schoolCode">School Code:</label>
-                <input type="text" id="schoolCode" name="schoolCode" placeholder="Enter 4-digit school code">
-            </div>
             <button type="submit" id="signup-button">Signup</button>
         </form>
-        <div class="navigation-buttons">
-            <a href="/studentlogin">Login</a>
-            <a href="/home">Home</a>
-        </div>
+        <p>Already have an account? <a href="/studentlogin">Login</a></p>
+        <a href="/home">Home</a>
     </div>
-    <script>
-    </script>
 </body>
 </html>

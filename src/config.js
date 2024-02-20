@@ -115,6 +115,45 @@ const classSchema = new mongoose.Schema({
   }
 });
 
+const StudentClassLinkSchema = new mongoose.Schema({
+  studentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'StudentLogin',
+    required: true,
+  },
+  classId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Class',
+    required: true,
+  },
+});
+
+const ExamAssignmentSchema = new mongoose.Schema({
+  examId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Test',
+    required: true,
+  },
+  examName: {
+    type: String,
+    required: true,
+  },
+  classId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Class',
+    required: true,
+  },
+  startTime: {
+    type: Date,
+    required: true,
+  },
+  endTime: {
+    type: Date,
+    required: true,
+  },
+});
+
+const ExamAssignmentModel = mongoose.model('ExamAssignment', ExamAssignmentSchema);
 
 const ClassModel = mongoose.model('Class', classSchema);
 
@@ -124,11 +163,15 @@ const StudentLoginModel = mongoose.model('StudentLogin', StudentLoginSchema);
 
 const TestModel = connectTests.model('Test', TestSchema);
 
+const StudentClassLinkModel = mongoose.model('StudentClassLink', StudentClassLinkSchema);
+
 module.exports = {
   LoginModel,
   collection,
   TestModel,
   SchoolCodeModel,
   StudentLoginModel,
-  ClassModel
+  ClassModel,
+  ExamAssignmentModel,
+  StudentClassLinkModel,
 };
