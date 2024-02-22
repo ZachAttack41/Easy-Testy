@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const crypto = require('crypto');
 const fs = require('fs');
-const { LoginModel, TestModel, SchoolCodeModel, StudentLoginModel, ClassModel, ExamAssignmentModel, StudentClassLinkModel } = require('./config');
+const { LoginModel, TestModel, SchoolCodeModel, StudentLoginModel, ClassModel, ExamAssignmentModel, StudentClassLinkModel, } = require('./config');
 
 const app = express();
 const port = 3000;
@@ -228,44 +228,52 @@ app.post('/joinclass', async (req, res) => {
 
 app.get('/studentclassview', async (req, res) => {
   try {
-    // Validate if user is logged in
-    if (!req.session.user) {
-      return res.redirect('/studentlogin');
-    }
+      // Validate if user is logged in
+      if (!req.session.user) {
+          return res.redirect('/studentlogin');
+      }
 
-    const userId = req.session.user._id;
+      const userId = req.session.user._id;
 
-    // Validate if userId is provided
-    if (!userId) {
-      return res.status(400).send('User ID is required');
-    }
+      // Validate if userId is provided
+      if (!userId) {
+          return res.status(400).send('User ID is required');
+      }
 
-    // Find the student class link for the user
-    const studentClassLink = await StudentClassLinkModel.findOne({ studentId: userId });
+      // Find the student class link for the user
+      const studentClassLink = await StudentClassLinkModel.findOne({ studentId: userId });
 
-    // Check if studentClassLink exists
-    if (!studentClassLink) {
-      return res.status(404).send('Student class link not found');
-    }
+      // Check if studentClassLink exists
+      if (!studentClassLink) {
+          return res.status(404).send('Student class link not found');
+      }
 
-    const classId = studentClassLink.classId;
+      const classId = studentClassLink.classId;
 
-    // Find class data by classId
-    const classData = await ClassModel.findOne({ _id: classId });
+      // Find class data by classId
+      const classData = await ClassModel.findOne({ _id: classId });
 
-    // Check if classData exists
-    if (!classData) {
-      return res.status(404).send('Class not found');
-    }
+      // Check if classData exists
+      if (!classData) {
+          return res.status(404).send('Class not found');
+      }
 
-    // Fetch assigned exams for the class
-    const assignedExams = await ExamAssignmentModel.find({ classId: classId });
+      // Fetch assigned exams for the class
+      const assignedExams = await ExamAssignmentModel.find({ classId: classId });
 
-    // Render the studentclassview page with class data and assigned exams
-    res.render('studentclassview', { classData: classData, assignedExams: assignedExams, userId: userId });
+      // Fetch testId for the assigned exam
+      const testIds = assignedExams.map(exam => exam.examId);
+      const tests = await TestModel.find({ _id: { $in: testIds } });
+      const testIdMap = {};
+      tests.forEach(test => {
+          testIdMap[test._id] = test._id; // Assuming examId and testId are the same
+      });
+
+      // Render the studentclassview page with class data, assigned exams, and testId map
+      res.render('studentclassview', { classData: classData, assignedExams: assignedExams, testIdMap: testIdMap, userId: userId });
   } catch (error) {
-    console.error('Error retrieving class details:', error);
-    res.status(500).send('Internal Server Error');
+      console.error('Error retrieving class details:', error);
+      res.status(500).send('Internal Server Error');
   }
 });
 
@@ -329,13 +337,25 @@ app.post('/save_test', async (req, res) => {
     let existingTest = await TestModel.findOne({ testName, createdBy });
 
     if (existingTest) {
-      existingTest.questions = questions;
+      existingTest.questions = questions.map(question => ({
+        ...question,
+        correctAns: {
+          value: question.correctAns,
+          index: question.answers.indexOf(question.correctAns)
+        }
+      }));
       await existingTest.save();
       res.status(200).json({ testId: existingTest._id });
     } else {
       const newTest = new TestModel({
         testName: testName,
-        questions: questions,
+        questions: questions.map(question => ({
+          ...question,
+          correctAns: {
+            value: question.correctAns,
+            index: question.answers.indexOf(question.correctAns)
+          }
+        })),
         createdBy: createdBy
       });
       await newTest.save();
@@ -382,25 +402,42 @@ app.post('/delete_test/:testid', async (req, res) => {
 });
 
 app.get('/formatted_test/:testid', async (req, res) => {
-  const test = await TestModel.findOne({ _id: req.params.testid });
-  res.render('formatted_test.ejs', { test: test });
+  try {
+    const test = await TestModel.findOne({ _id: req.params.testid });
+    res.render('formatted_test', { test: test, testId: req.params.testid });
+  } catch (error) {
+    console.error('Error fetching test:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 app.post('/save_and_format_test', async (req, res) => {
   try {
     const { testName, questions } = req.body;
-    const createdBy = req.session.user.username; // Get the username of the logged-in user
+    const createdBy = req.session.user.username;
 
     let existingTest = await TestModel.findOne({ testName, createdBy });
 
     if (existingTest) {
-      existingTest.questions = questions;
+      existingTest.questions = questions.map(question => ({
+        ...question,
+        correctAns: {
+          value: question.correctAns,
+          index: question.answers.indexOf(question.correctAns)
+        }
+      }));
       await existingTest.save();
       res.status(200).json({ testId: existingTest._id });
     } else {
       const newTest = new TestModel({
         testName: testName,
-        questions: questions,
+        questions: questions.map(question => ({
+          ...question,
+          correctAns: {
+            value: question.correctAns,
+            index: question.answers.indexOf(question.correctAns)
+          }
+        })),
         createdBy: createdBy
       });
       await newTest.save();
@@ -410,10 +447,6 @@ app.post('/save_and_format_test', async (req, res) => {
     console.error('Error saving and formatting test:', error);
     res.status(500).send('Internal Server Error: ' + error.message);
   }
-});
-
-app.get('/:file', (req, res) => {
-  res.render(req.params.file + '.ejs');
 });
 
 app.post('/delete_test/:testid', async (req, res) => {
@@ -489,7 +522,7 @@ app.get('/examdetails/:testid/:classId', async (req, res) => {
       return res.status(404).send('Test not found');
     }
 
-    res.render('examdetails', { test: test, classData: classData, classId: classId, testid: testId }); // Pass testid here
+    res.render('examdetails', { test: test, classData: classData, classId: classId, testid: testId });
   } catch (error) {
     console.error('Error retrieving exam details:', error);
     res.status(500).send('Internal Server Error');
@@ -548,3 +581,120 @@ app.post('/leaveclass', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+app.get('/starttest/:examId', async (req, res) => {
+  try {
+    // Fetch the exam by its ID
+    const exam = await ExamAssignmentModel.findById(req.params.examId);
+    if (!exam) {
+      return res.status(404).send('Exam not found');
+    }
+
+    // Fetch the corresponding test using the examId
+    const test = await TestModel.findById(exam.examId);
+    if (!test) {
+      return res.status(404).send('Test not found for the given exam');
+    }
+
+    // Render the starttest view, passing the exam and the associated test to it
+    res.render('starttest', { exam: exam, test: test });
+  } catch (error) {
+    console.error('Error fetching exam:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/testing/:testId', async (req, res) => {
+  try {
+      const test = await TestModel.findById(req.params.testId);
+      if (!test) {
+          return res.status(404).send('Test not found');
+      }
+      console.log('Test:', test); // Log the test object
+      console.log('Number of questions:', test.questions.length); // Log the number of questions
+      res.render('testing', { test: test });
+  } catch (error) {
+      console.error('Error fetching test:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/viewanswerkey', async function(req, res) {
+  try {
+      const testId = req.query.testId;
+      console.log('Received testId:', testId);
+      const test = await TestModel.findById(testId).exec();
+      console.log('Fetched test:', test);
+
+      if (!test) {
+          console.error('Test not found');
+          return res.status(404).send('Test not found');
+      }
+
+      // Map through each question in the test and extract the correct answer choice
+      const correctAnswers = test.questions.map(question => {
+          const correctIndex = question.correctAns.index; // Get the index of the correct answer
+          const answerChoice = String.fromCharCode(65 + correctIndex); // Convert index to ASCII character (A, B, C, D, E)
+          return answerChoice;
+      });
+
+      res.render('viewanswerkey', { test: test, correctAnswers: correctAnswers });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/:file', (req, res) => {
+  const fileName = req.params.file + '.ejs';
+  res.render(fileName);
+});
+
+
+
+// function penissucker (loopCount) {
+//   let i = 0;
+//   while (i < loopCount) {
+//     i += 1;
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function buttholelicker () {
+//   for (let i = 0; i < 55; i += 2) {   
+//   }
+// }
+
+// let x = [1, 2, "22", "penis"]
+
+// console.log(x[3])
+
+// this will print penis
+
+
+
+
+// function balls () {
+//   for (i = 0; i < 15; i ++) {
+//   console.log(balls)
+//   }
+// }

@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
     <style>
+        /* Your CSS styles here */
         .anta-regular {
             font-family: "Anta", sans-serif;
             font-weight: 400;
@@ -31,16 +32,15 @@
         }
 
         section {
-            margin: auto;
+            margin: 25px auto;
             padding: 25px;
-            font-family: "Anta", sans-serif;
             background-color: #0a1116;
-            box-shadow: 0 0 10px #ffffff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            width: 80%;
+            max-width: 800px;
+            border-radius: 25px;
+            position: relative;
             text-align: center;
-            margin-bottom: 20px;
-            margin-top: 20px;
-            width: 75%;
-            
         }
 
         h2 {
@@ -129,8 +129,23 @@
 
     <section class="assigned-exams-container">
         <h2>Assigned Exams:</h2>
-        <!-- Assigned exams will be dynamically added here -->
-    </section>
+        <% if (assignedExams.length > 0) { %>
+            <ul>
+                <% assignedExams.forEach(exam => { %>
+                    <li>
+                        <!-- Modify the href attribute to include the testId as a query parameter -->
+                        <a href="/starttest/<%= exam._id %>?testId=<%= testIdMap[exam.examId] %>" class="exam-link">
+                            <%= exam.examName %> - 
+                            <%= new Date(exam.startTime).toLocaleDateString() %> <%= new Date(exam.startTime).toLocaleTimeString() %> -
+                            <%= new Date(exam.endTime).toLocaleTimeString() %>
+                        </a>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No exams currently assigned for this class.</p>
+        <% } %>
+    </section>       
 
     <section>
         <div class="buttons-container">

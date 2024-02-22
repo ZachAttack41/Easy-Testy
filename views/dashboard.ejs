@@ -149,7 +149,7 @@ a:hover {
     <section>
         <h2>Your Tests:</h2>
         <% for (let i = 0; i < tests.length; i++) { %>
-            <a href="/view_test/<%= tests[i]._id %>">
+            <a href="/formatted_test/<%= tests[i]._id %>">
                 <div>
                     <h3><%= tests[i].testName %></h2>
                     <h3><%= tests[i].questions.length %> Questions</h3>

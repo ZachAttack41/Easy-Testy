@@ -61,7 +61,10 @@ const QuestionSchema = new mongoose.Schema({
   content: { type: String, required: true },
   images: [{ type: String }],
   answers: { type: [String] },
-  correctAns: { type: String }
+  correctAns: { 
+    value: { type: String },
+    index: { type: Number }
+  }
 });
 
 const TestSchema = new mongoose.Schema({
@@ -152,6 +155,7 @@ const ExamAssignmentSchema = new mongoose.Schema({
     required: true,
   },
 });
+
 
 const ExamAssignmentModel = mongoose.model('ExamAssignment', ExamAssignmentSchema);
 

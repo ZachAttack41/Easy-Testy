@@ -13,6 +13,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
 </head>
 <style>
+    .answer-option {
+        margin-top: 20px; /* Adjust this value to move the bubbles down */
+        display: flex; /* Use flexbox to align items */
+        align-items: center; /* Vertically center items */
+    }
+
+
+    .answer-input-container input[type="text"] {
+        width: calc(100% + 500px); /* Adjust width */
+        padding: 15px; /* Keep padding */
+        margin-top: 8px;
+        margin-bottom: 15px;
+        margin-right: 15px; /* Add margin-right */
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 18px;
+    }
+
+
+
+    .answer-option {
+        margin-top: 10px;
+    }
+
     body {
         font-family: "Anta", sans-serif;
         background-color: #0a1116;
@@ -28,7 +53,7 @@
         background-color: #122028;
         padding: 20px;
         border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.1);
         max-width: 600px;
         width: 100%;
         text-align: center;
@@ -39,13 +64,15 @@
         color: #ffffff;
         font-size: 30px;
         margin-bottom: 20px;
+        margin-right: 20px;
         overflow: visible;
     }
 
     label {
         display: block;
         font-family: "Anta", sans-serif;
-        margin-top: 15px;
+        margin-top: -7px;
+        margin-right: 15px;
         color: #ffffff;
         font-size: 25px;
     }
@@ -62,20 +89,22 @@
     }
 
     button {
-        background-color: #080683;
-        font-family: "Anta", sans-serif;
-        color: #fff;
-        cursor: pointer;
-        font-size: 18px;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        margin-top: 10px;
-        transition: background-color 0.3s;
-    }
+    background-color: #080683;
+    font-family: "Anta", sans-serif;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Add white shadow */
+}
 
     button:hover {
         background-color: #060559;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* Increase shadow on hover */
     }
 
     #root .new-question textarea {
@@ -127,7 +156,8 @@
         font-size: 25px;
         padding: 0px 0px;
         border: none;
-        margin-top: -10px;
+        margin-right: 20px;
+        margin-bottom: 25px;
         transition: background-color 0.3s;
         width: 175px;
         border-radius: 50%;
@@ -206,6 +236,7 @@
     .zoomed-in {
     zoom: 150%;
     }
+
 </style>
 <body class="zoomed-in">
     <form>
@@ -336,16 +367,28 @@
                     });
                 }
 
-                if (question.answers && question.answers.length > 0) {
-                    let answers = document.createElement("ul");
+                if (question.answers) {
+                    let answersContainer = document.createElement("div"); // Create container for answer input elements
+                    answersContainer.classList.add("answer-input-container"); // Add class to container
+
+                    // Track the index of the correct answer
+                    let correctAnswerIndex = question.answers.indexOf(question.correctAns);
 
                     ['0', '1', '2', '3', '4'].forEach((option, index) => {
                         let answerOption = document.createElement("li");
+                        answerOption.classList.add("answer-option");
 
                         let answerInput = document.createElement("input");
                         answerInput.type = "text";
-                        answerInput.value = question.answers[index] || "";
+                        answerInput.value = question.answers[index];
                         answerInput.placeholder = "Choice " + String.fromCharCode(65 + index);
+
+                        let correctAnswerRadio = document.createElement("input");
+                        correctAnswerRadio.type = "radio";
+                        correctAnswerRadio.name = "correctAnswer" + question.index;
+                        correctAnswerRadio.value = index;
+                        correctAnswerRadio.checked = index === correctAnswerIndex;
+                        correctAnswerRadio.classList.add("answer-radio");
 
                         let answerLabel = document.createElement("label");
                         answerLabel.className = "answer-label";
@@ -355,12 +398,18 @@
                             questions[question.index].answers[index] = answerInput.value;
                         });
 
+                        correctAnswerRadio.addEventListener("change", () => {
+                            correctAnswerIndex = index;
+                            questions[question.index].correctAns = question.answers[index];
+                        });
+
+                        answerOption.appendChild(correctAnswerRadio);
                         answerOption.appendChild(answerLabel);
                         answerOption.appendChild(answerInput);
-                        answers.appendChild(answerOption);
+                        answersContainer.appendChild(answerOption);
                     });
 
-                    questionContainer.appendChild(answers);
+                    questionContainer.appendChild(answersContainer);
                 }
 
                 let removeButton = document.createElement("button");
@@ -447,6 +496,43 @@
                 }
             } catch (error) {
                 console.error('Error saving and formatting test:', error);
+            }
+        }
+
+        async function saveTest() {
+            try {
+                const testName = document.getElementById("testName").value;
+
+                // Filter out empty answers before saving
+                const filteredQuestions = questions.map(question => {
+                    if (!question.correctAns) {
+                        delete question.correctAns; // Remove the correct answer property if it's empty
+                    }
+                    return question;
+                });
+
+                const response = await fetch("/save_test", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        testName: testName,
+                        questions: filteredQuestions
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('Test saved successfully!');
+                    showPopup("Saved.", true);
+                    console.log(response);
+                } else {
+                    console.error('Error saving test:', response.status);
+                    showPopup("Failed to Save Test. Try again later.", false);
+                }
+            } catch (error) {
+                console.error('Error saving test:', error);
+                showPopup("Failed to Save Test. Try again later.", false);
             }
         }
 
